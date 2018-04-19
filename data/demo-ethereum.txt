@@ -13,6 +13,7 @@ Ethereum có 2 public blokchain:
     5/Tạo giao diện với contract thông qua truffle console và sử dụng thông qua webpage.
 
 1/
+================================================================================================
 Mac OS:  brew tap ethereum/ethereum
          brew install ethereum
 
@@ -22,7 +23,9 @@ sudo add-apt-repository -y ppa:ethereum/ethereum
 sudo apt-get update
 sudo apt-get install ethereum
 
-Sau khi đã cài đặt geth, chúng ta sẽ chạy Ethereum node trên máy local bằng command này.
+2/   Sau khi đã cài đặt geth, chúng ta sẽ chạy Ethereum node trên máy local bằng command này.
+=================================================================================================
+
 
 Nếu lần đầu chạy phải tạo account trước bằng lệnh sau:
 
@@ -39,6 +42,68 @@ pvt@pvt ~ $
 geth --testnet --syncmode "fast" --rpc --rpcapi db,eth,net,web3,personal --cache=1024 --rpcport 8545 --rpcaddr 127.0.0.1 --rpccorsdomain "*" --bootnodes "enode://20c9ad97c081d63397d7b685a412227a40e23c8bdc6688c6f37e97cfbc22d2b4d1db1510d8f61e6a8866ad7f0e17c02b14182d
 37ea7c3c8b9c2683aeb6b733a1@52.169.14.227:30303,enode://6ce05930c72abc632c58e2e4324f7c7ea478cec0ed4fa2528982cf34
 483094e9cbc9216e7aa349691242576d552a2a56aaeae426c5303ded677ce455ba1acd9d@13.84.180.240:30303"
+
+
+Create file named: mygenesis.json
+
+{
+
+"config": {
+
+"chainId": 15, 
+
+"homesteadBlock": 0,
+
+"eip155Block": 0,
+
+"eip158Block": 0
+
+},
+
+"difficulty": "20",
+
+"gasLimit": "2100000",
+
+"alloc": {
+
+"7df9a875a174b3bc565e6424a0050ebc1b2d1d82": 
+    { "balance": "300000" },
+
+"f41c74c9ae680c1aa78f42e5647a62f353b7bdde": 
+    { "balance": "400000" }
+
+}
+}
+
+Chay lenh sau de init
+
+pvt@pvt ~ $ geth --datadir /home/pvt/testnet/ init /home/pvt/testnet/mygenesis.json
+
+Start testnet chain from the terminal
+
+pvt@pvt ~ $ geth --datadir /home/pvt/testnet/ --networkid monkey3110 --rpc --rpcaddr "localhost" --rpcport "8545" --rpccorsdomain "*" --rpcapi "eth, net, web3, personal, admin, mine" --nodiscover --maxpeers 0 console
+
+Start a miner session for your testnet chain
+
+geth --datadir /home/pvt/testnet/ --networkid 12345 --rpc --rpcaddr "localhost" --rpcport "8545" --rpccorsdomain "*" --rpcapi "eth, net, web3, personal, admin, mine" --mine --minerthreads 1 --nodiscover --maxpeers 0 miner
+
+Attach another session to Geth
+
+geth --datadir /home/pvt/testnet/ attach ipc:geth.ipc
+
+Unlocking account in Geth console
+1/Method 1: Unlock account for each new transaction in Geth console
+personal.unlockAccount("0x4e5e827ccf639ceb79add65e4013cfe40208a28f")
+
+2/Method 2: Unlock account for the whole session
+Data directory and NetworkId should be the same as specified earlier
+
+geth --datadir /home/pvt/testnet/ --networkid 12345 --rpc --rpcaddr "localhost" --rpcport "8545" --rpccorsdomain "*" --rpcapi "eth, net, web3, personal, admin, mine" --mine --minerthreads 1 --unlock 0 --nodiscover --maxpeers 0 miner
+
+
+
+personal.newAccount()
+balance = web3.fromWei(eth.getBalance("0x4e5e827ccf639ceb79add65e4013cfe40208a28f"), "ether")
 
 
 Lệnh này sẽ chạy Ethereum node, kết nối với một node khác và bắt đầu download blockchain. Thời gian download dựa trên kết nối internet, RAM, hard driver .... Tôi chạy khoảng 10-15 phút với máy 8GB RAM và tốc độc 50Mbps. 
