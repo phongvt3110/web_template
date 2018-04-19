@@ -1,0 +1,87 @@
+Ethereum có 2 public blokchain:
+
+    Main Network ( còn được gọi Homestead) Đây là blockchain trên thực tế. Ether có giá trị thực trên mạng này.
+    Testnet ( còn được gọi là Ropsten ,Rinbeky ). Đây là test blockchain, bạn hãy tưởng tượng nó như một  QA hoặc staging server. Nó được sử dụng chỉ cho mục đích test. Tất cả Ether trong network này đều là fake:
+
+
+ chúng ta sẽ thực hiện :
+
+    1/Cài đặt geth - phần mềm client sử dụng để download blockchain và chạy Ethereum node trên máy local
+    2/Cài đặt Ethereum dapp network gọi là Truffle, nó sẽ được sử dụng để compliling và deploying contract của chúng ta.
+    3/Tạo một update nhỏ với ứng dụng Voting để làm việc với truffle.
+    4/Complie và deploy contract trên Ropsten testnet.
+    5/Tạo giao diện với contract thông qua truffle console và sử dụng thông qua webpage.
+
+1/
+Mac OS:  brew tap ethereum/ethereum
+         brew install ethereum
+
+Linux:(Ubuntu, Mint)
+
+sudo add-apt-repository -y ppa:ethereum/ethereum
+sudo apt-get update
+sudo apt-get install ethereum
+
+Sau khi đã cài đặt geth, chúng ta sẽ chạy Ethereum node trên máy local bằng command này.
+
+Nếu lần đầu chạy phải tạo account trước bằng lệnh sau:
+
+geth --testnet account new
+
+Nhập password cho account
+
+Sau đó chạy lệnh sau :
+
+geth --testnet --syncmode "fast" console
+
+Lệnh sau không dùng đến:
+pvt@pvt ~ $ 
+geth --testnet --syncmode "fast" --rpc --rpcapi db,eth,net,web3,personal --cache=1024 --rpcport 8545 --rpcaddr 127.0.0.1 --rpccorsdomain "*" --bootnodes "enode://20c9ad97c081d63397d7b685a412227a40e23c8bdc6688c6f37e97cfbc22d2b4d1db1510d8f61e6a8866ad7f0e17c02b14182d
+37ea7c3c8b9c2683aeb6b733a1@52.169.14.227:30303,enode://6ce05930c72abc632c58e2e4324f7c7ea478cec0ed4fa2528982cf34
+483094e9cbc9216e7aa349691242576d552a2a56aaeae426c5303ded677ce455ba1acd9d@13.84.180.240:30303"
+
+
+Lệnh này sẽ chạy Ethereum node, kết nối với một node khác và bắt đầu download blockchain. Thời gian download dựa trên kết nối internet, RAM, hard driver .... Tôi chạy khoảng 10-15 phút với máy 8GB RAM và tốc độc 50Mbps. 
+
+
+Trong console sau khi chạy xong geth, bạn sẽ thấy output ra tương tự như bên dưới. Khi blockchain của bạn đã được đồng bộ, block mới sẽ tương tự như khi kiểm tra trên https://ropsten.etherscan.io/
+
+
+2. Cài đặt Truffle Framework
+
+Install truffle using npm
+
+sudo npm install -g truffle
+sudo npm install -g ethereumjs-testrpc
+
+
+Create a project
+Init Truffle project
+
+# mkdir myproject
+# cd myprojet/
+# truffle init
+# truffle compile
+
+
+Deploy contracts
+
+testrpc should be launched
+Deploy contracts on local chain
+
+# truffle migrate
+
+
+Create DAPP
+
+To build your frontend, run:
+
+# truffle build
+
+Launch server for DAPP testing
+
+# truffle serve
+
+Optional: add -p option to change port
+
+Go to http://localhost:8080 to see the Dapp
